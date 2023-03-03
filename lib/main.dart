@@ -1,8 +1,8 @@
-import 'package:app_hrm/pages/listdata.dart';
+import 'package:app_hrm/pages/MyHomePage.dart';
+import 'package:app_hrm/pages/department.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -16,8 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "HRM",
-      home: ListData(),
-      
+      home: Department(),
     );
   }
 }
