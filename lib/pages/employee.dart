@@ -96,6 +96,21 @@ class _EmployeeState extends State<Employee> {
                     SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EmployeeEditPage(
+                                    employeeList[index]['ud_fullname_th'],
+                                    employeeList[index]['ud_fullname_en'],
+                                    employeeList[index]['ud_phone'],
+                                    employeeList[index]['ud_nickname'],
+                                    employeeList[index]['ud_birthday'],
+                                    employeeList[index]['id']))).then((value) {
+                          setState(() {
+                            print(value);
+                            getEmployee();
+                          });
+                        });
                         // do something when more_vert icon is pressed
                       },
                       child: Icon(Icons.more_vert),

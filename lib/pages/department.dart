@@ -95,6 +95,25 @@ class _DepartmentState extends State<Department> {
                     SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {
+                        Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PositionPage(
+                                        todolistitems[index]['dept_id'],
+                                        todolistitems[index]['dept_name_en'])))
+                            .then((value) {
+                          setState(() {
+                            print(value);
+                            if (value == 'delete') {
+                              final snackBar = SnackBar(
+                                content: const Text('ลบรายการเรียบร้อยแล้ว'),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                            gettodolist();
+                          });
+                        });
                         // do something when more_vert icon is pressed
                       },
                       child: Icon(Icons.more_vert),
