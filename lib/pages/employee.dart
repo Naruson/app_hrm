@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:app_hrm/pages/createEmployee.dart';
+import 'package:app_hrm/pages/employeeEdit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:app_hrm/pages/position.dart';
 import 'package:http/http.dart' as http;
@@ -7,27 +8,27 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 
-class Department extends StatefulWidget {
-  const Department({super.key});
+class Employee extends StatefulWidget {
+  const Employee({super.key});
 
   @override
-  State<Department> createState() => _DepartmentState();
+  State<Employee> createState() => _EmployeeState();
 }
 
-class _DepartmentState extends State<Department> {
-  List todolistitems = [];
+class _EmployeeState extends State<Employee> {
+  List employeeList = [];
   Color myColor = Color(int.parse("2E3579", radix: 16));
   // List datalistItem = ["Book 01", "Book 02", "Book 03", "Book 04", "Book 05"];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    gettodolist();
+    getEmployee();
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Department(),
+      body: Employee(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
@@ -41,7 +42,7 @@ class _DepartmentState extends State<Department> {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             });
-            gettodolist();
+            getEmployee();
           });
         },
         child: Icon(Icons.add),
@@ -49,9 +50,9 @@ class _DepartmentState extends State<Department> {
     );
   }
 
-  Widget Department() {
+  Widget Employee() {
     return ListView.builder(
-        itemCount: todolistitems.length,
+        itemCount: employeeList.length,
         itemBuilder: (context, index) {
           return Card(
             child: ListTile(
@@ -59,24 +60,21 @@ class _DepartmentState extends State<Department> {
                   IconData(0xf7c8, fontFamily: 'MaterialIcons'),
                   color: Colors.cyan[200],
                 ),
-                title: Text("${todolistitems[index]['dept_name_en']}"),
+                title: Text("${employeeList[index]['ud_fullname_th']}"),
                 onTap: () {
                   Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PositionPage(
-                                  todolistitems[index]['dept_id'],
-                                  todolistitems[index]['dept_name_en'])))
-                      .then((value) {
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EmployeeEditPage(
+                              employeeList[index]['ud_fullname_th'],
+                              employeeList[index]['ud_fullname_en'],
+                              employeeList[index]['ud_phone'],
+                              employeeList[index]['ud_nickname'],
+                              employeeList[index]['ud_birthday'],
+                              employeeList[index]['id']))).then((value) {
                     setState(() {
                       print(value);
-                      if (value == 'delete') {
-                        final snackBar = SnackBar(
-                          content: const Text('ลบรายการเรียบร้อยแล้ว'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                      gettodolist();
+                      getEmployee();
                     });
                   });
                 },
@@ -85,9 +83,12 @@ class _DepartmentState extends State<Department> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        print('delete');
-                        deleteDepartment(todolistitems[index]['dept_id']);
-                        gettodolist();
+                        deleteUser(employeeList[index]['id']);
+                        final snackBar = SnackBar(
+                          content: const Text('ลบรายการเรียบร้อยแล้ว'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        getEmployee();
                         // do something when delete icon is pressed
                       },
                       child: Icon(Icons.delete),
@@ -105,22 +106,34 @@ class _DepartmentState extends State<Department> {
         });
   }
 
-  Future gettodolist() async {
-    List alltodo = [];
+  Future<void> getEmployee() async {
+    try {
+      var url = Uri.http('127.0.0.1:8000', '/app/employee');
+      var response = await http.get(url);
 
-    var url = Uri.http('127.0.0.1:8000', '/app/department');
-    var response = await http.get(url);
-    final result = utf8.decode(response.bodyBytes);
+      if (response.statusCode == 200) {
+        var result = jsonDecode(response.body);
+        var data = result['data'];
+        // print(data);
 
-    print(result);
-    setState(() {
-      todolistitems = jsonDecode(result);
-    });
+        setState(() {
+          employeeList = data;
+        });
+      } else {
+        // Handle HTTP error
+        print('HTTP error ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle other errors
+      print('Error: $e');
+    }
   }
 
-  Future deleteDepartment(int dept_id) async {
-    print(dept_id);
-    var url = Uri.http('127.0.0.1:8000', '/app/department/$dept_id');
-    var response = await http.delete(url);
+  Future deleteUser(user_id) async {
+    var url = Uri.http('127.0.0.1:8000', '/app/employee/${user_id}');
+    Map<String, String> header = {"Content-type": "application/json"};
+    var response = await http.delete(url, headers: header);
+    print('------result-------');
+    print(response.body);
   }
 }

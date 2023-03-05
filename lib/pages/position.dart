@@ -1,4 +1,4 @@
-import 'package:app_hrm/pages/add.dart';
+import 'package:app_hrm/pages/createEmployee.dart';
 import 'package:app_hrm/pages/department.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -79,8 +79,8 @@ class _UpdatePageState extends State<PositionPage> {
       body: listData(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => AddPage()))
+          Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CreateEmployeePage()))
               .then((value) {
             setState(() {
               if (value == 'add') {
