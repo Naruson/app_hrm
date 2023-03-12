@@ -262,7 +262,6 @@ class _EmployeeEditPageState extends State<EmployeeEditPage> {
 
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
-        print(result);
       } else {
         // Handle HTTP error
         print('HTTP error ${response.statusCode}');
