@@ -459,17 +459,19 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
 
   Future updateUser() async {
     try {
-      var url = Uri.http('127.0.0.1:8000', '/app/employee');
+      var url = Uri.http('127.0.0.1:8000', '/app/employee/$_v1');
       Map<String, String> header = {"Content-type": "application/json"};
       String jsondata =
           '{"fullname_th":"${fullname_th.text}","fullname_en":"${fullname_en.text}","phone":"${phone.text}","nickname":"${nickname.text}","birthday" : "${_birthday.text}","email":"${email.text}","dept_id":"${department}", "dp_id":"${position}","user_contract_type":"${emp_type}","user_username":"${username.text}","user_start_date":"${_start_date.text}","ud_id_card":"${id_card.text}"}';
 
-      var response = await http.post(url, headers: header, body: jsondata);
+      var response = await http.patch(url, headers: header, body: jsondata);
 
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
       } else {
         // Handle HTTP error
+        var result = jsonDecode(response.body);
+        print(result);
         print('HTTP error ${response.statusCode}');
       }
     } catch (e) {
