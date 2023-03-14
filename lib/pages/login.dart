@@ -115,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> login() async {
+    print('${password.text} username: ${username.text}');
     final url = Uri.parse('http://127.0.0.1:8000/auth/login');
     final response = await http.post(
       url,

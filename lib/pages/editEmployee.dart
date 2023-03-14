@@ -12,46 +12,53 @@ import 'package:flutter/cupertino.dart';
 import 'dart:math';
 import 'package:intl/date_symbol_data_local.dart';
 
-class CreateEmployeePage extends StatefulWidget {
-  const CreateEmployeePage({Key? key}) : super(key: key);
+class EditEmployeePage extends StatefulWidget {
+  final v1;
+  const EditEmployeePage(this.v1);
 
   @override
-  State<CreateEmployeePage> createState() => _CreateEmployeePageState();
+  State<EditEmployeePage> createState() => _EditEmployeePageState();
 }
 
-class _CreateEmployeePageState extends State<CreateEmployeePage> {
+var _v1;
+TextEditingController fullname_th = TextEditingController();
+TextEditingController fullname_en = TextEditingController();
+TextEditingController nickname = TextEditingController();
+TextEditingController username = TextEditingController();
+TextEditingController phone = TextEditingController();
+TextEditingController email = TextEditingController();
+TextEditingController id_card = TextEditingController();
+TextEditingController company = TextEditingController();
+
+TextEditingController _birthday = TextEditingController();
+final TextEditingController _start_date = TextEditingController();
+late DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+
+var emp_type = null;
+var department = null;
+var position = null;
+
+class _EditEmployeePageState extends State<EditEmployeePage> {
   List<dynamic> departmentList = [];
   List<dynamic> positionList = [];
   List<dynamic> empTypeList = [];
-  TextEditingController fullname_th = TextEditingController();
-  TextEditingController fullname_en = TextEditingController();
-  TextEditingController nickname = TextEditingController();
-  TextEditingController username = TextEditingController();
-  TextEditingController phone = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController id_card = TextEditingController();
-  TextEditingController company = TextEditingController();
-  TextEditingController emp_id = TextEditingController();
-  TextEditingController password = TextEditingController();
-  var emp_type = null;
-  var department = null;
-  var position = null;
-  final TextEditingController _birthday = TextEditingController();
-  final TextEditingController _start_date = TextEditingController();
-  late DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+
   int _currentStep = 0;
   final _controller = TextEditingController();
 
-// void dispose() {
-//     _controller.dispose();
-//     super.dispose();
-//   }
   @override
   void initState() {
-    // TODO: implement initState
-    getDepartment();
-    getEmployeeType();
     super.initState();
+    _v1 = widget.v1;
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await getUser();
+    getEmployeeType();
+    getDepartment();
+    getPosition();
+    print('position ${position}');
   }
 
   void addPosition() {
@@ -63,8 +70,8 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
   void _selectDate1() async {
     final DateTime? newDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(), // Set the initial date to today's date
-      firstDate: DateTime(1900), // Set the minimum date to January 1st, 1900
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
       lastDate: DateTime(2100),
       helpText: 'Select a date',
     );
@@ -215,7 +222,8 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
                     onChanged: (value) {
                       setState(() {
                         department = value;
-                        print("department: " + department);
+                        print("department: " + department.toString());
+                        position = null;
                         addPosition();
                       });
                     },
@@ -239,8 +247,7 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
                     onChanged: (value) {
                       setState(() {
                         position = value;
-                        print("Position: " + position);
-                        addPosition();
+                        print("Position: " + position.toString());
                       });
                     },
                     value: position,
@@ -285,29 +292,6 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
                             icon: Icon(Icons.copy))),
                   ),
 
-                  SizedBox(height: 30),
-                  TextFormField(
-                    // readOnly: true,
-                    controller: _controller,
-                    decoration: InputDecoration(
-                        labelText: 'รหัสผ่าน',
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              final data =
-                                  ClipboardData(text: _controller.text);
-                              Clipboard.setData(data);
-
-                              final snackbar =
-                                  SnackBar(content: Text("Password Copy"));
-
-                              ScaffoldMessenger.of(context)
-                                ..removeCurrentSnackBar()
-                                ..showSnackBar(snackbar);
-                            },
-                            icon: Icon(Icons.copy))),
-                  ),
-                  SizedBox(height: 10),
-                  buildButtonWidget(),
                   // ElevatedButton(
                   //   // onPressed: ,
                   //   child: const Text('Save'),
@@ -337,7 +321,7 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
             ),
           ),
         ),
-        title: Text("เพิ่มรายชื่อ"),
+        title: Text("แก้ไขรายชื่อ"),
       ),
       body: Stepper(
         type: StepperType.horizontal,
@@ -355,7 +339,7 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
                 if (_currentStep == 2)
                   ElevatedButton(
                     onPressed: () async {
-                      await addUser();
+                      await updateUser();
                       final snackBar = SnackBar(
                           content: const Text('เพิ่มรายการเรียบร้อยแล้ว'));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -407,23 +391,6 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
     );
   }
 
-  Widget buildButtonWidget() {
-    return Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: ElevatedButton(
-              onPressed: () {
-                final password = generatePassword();
-                _controller.text = password;
-              },
-              child: Text(
-                "Generate",
-                style: TextStyle(color: Colors.white),
-              )),
-        ));
-  }
-
   Future<void> getDepartment() async {
     try {
       var url = Uri.http('127.0.0.1:8000', '/app/employee/createDepartment');
@@ -470,8 +437,7 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
 
   Future<void> getPosition() async {
     try {
-      var url =
-          Uri.http('127.0.0.1:8000', '/app/department/$department/position');
+      var url = await Uri.http('127.0.0.1:8000', '/app/department/$department');
       var response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -491,12 +457,12 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
     }
   }
 
-  Future addUser() async {
+  Future updateUser() async {
     try {
       var url = Uri.http('127.0.0.1:8000', '/app/employee');
       Map<String, String> header = {"Content-type": "application/json"};
       String jsondata =
-          '{"fullname_th":"${fullname_th.text}","fullname_en":"${fullname_en.text}","user_password": "${password.text}","phone":"${phone.text}","nickname":"${nickname.text}","birthday" : "${_birthday.text}","ud_email":"${email.text}","dept_id":"${department}", "dp_id":"${position}","user_contract_type":"${emp_type}","user_username":"${username.text}","user_password":"${_controller.text}","user_start_date":"${_start_date.text}","ud_id_card":"${id_card.text}"}';
+          '{"fullname_th":"${fullname_th.text}","fullname_en":"${fullname_en.text}","phone":"${phone.text}","nickname":"${nickname.text}","birthday" : "${_birthday.text}","ud_email":"${email.text}","dept_id":"${department}", "dp_id":"${position}","user_contract_type":"${emp_type}","user_username":"${username.text}","user_password":"${_controller.text}","user_start_date":"${_start_date.text}","ud_id_card":"${id_card}"}';
 
       var response = await http.post(url, headers: header, body: jsondata);
 
@@ -513,24 +479,35 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
   }
 }
 
-String generatePassword({
-  bool letter = true,
-  bool isNumber = true,
-  bool isSpecial = true,
-}) {
-  final length = 8;
-  final letterLowerCase = "abcdefghijklmnopqrstuvwxyz";
-  final letterUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  final number = '0123456789';
-  final special = '@#%^*>\$@?/[]=+';
+Future getUser() async {
+  try {
+    var url = Uri.http('127.0.0.1:8000', '/app/employee/$_v1/edit');
+    Map<String, String> header = {"Content-type": "application/json"};
+    var response = await http.get(url, headers: header);
 
-  String chars = "";
-  if (letter) chars += '$letterLowerCase$letterUpperCase';
-  if (isNumber) chars += '$number';
-  if (isSpecial) chars += '$special';
+    if (response.statusCode == 200) {
+      var result = jsonDecode(response.body);
+      fullname_th.text = result['data']['ud_fullname_th'];
+      fullname_en.text = result['data']['ud_fullname_en'];
+      nickname.text = result['data']['ud_nickname'];
+      username.text = result['data']['user_username'];
+      phone.text = result['data']['ud_phone'];
+      email.text = result['data']['ud_email'];
+      id_card.text = result['data']['ud_id_card'];
+      company.text = result['data']['user_company'];
 
-  return List.generate(length, (index) {
-    final indexRandom = Random.secure().nextInt(chars.length);
-    return chars[indexRandom];
-  }).join('');
+      _birthday.text = result['data']['ud_birthday'];
+      _start_date.text = result['data']['ud_birthday'];
+
+      emp_type = result['data']['user_contract_type'];
+      department = result['data']['dept_id'].toString();
+      position = result['data']['position'].toString();
+    } else {
+      // Handle HTTP error
+      print('HTTP error ${response.statusCode}');
+    }
+  } catch (e) {
+    // Handle other errors
+    print('Error: $e');
+  }
 }
