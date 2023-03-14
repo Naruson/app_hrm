@@ -462,7 +462,7 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
       var url = Uri.http('127.0.0.1:8000', '/app/employee');
       Map<String, String> header = {"Content-type": "application/json"};
       String jsondata =
-          '{"fullname_th":"${fullname_th.text}","fullname_en":"${fullname_en.text}","phone":"${phone.text}","nickname":"${nickname.text}","birthday" : "${_birthday.text}","ud_email":"${email.text}","dept_id":"${department}", "dp_id":"${position}","user_contract_type":"${emp_type}","user_username":"${username.text}","user_password":"${_controller.text}","user_start_date":"${_start_date.text}","ud_id_card":"${id_card}"}';
+          '{"fullname_th":"${fullname_th.text}","fullname_en":"${fullname_en.text}","phone":"${phone.text}","nickname":"${nickname.text}","birthday" : "${_birthday.text}","email":"${email.text}","dept_id":"${department}", "dp_id":"${position}","user_contract_type":"${emp_type}","user_username":"${username.text}","user_start_date":"${_start_date.text}","ud_id_card":"${id_card.text}"}';
 
       var response = await http.post(url, headers: header, body: jsondata);
 
