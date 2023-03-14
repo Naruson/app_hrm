@@ -1,125 +1,179 @@
-// import 'package:flutter/material.dart';
-// // import 'package:app_hrm/pages/profile.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app_hrm/main.dart';
+import 'package:app_hrm/pages/index.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-// class LoginPage extends StatefulWidget {
-//   // const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  // const LoginPage({super.key});
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
 
-//   @override
-//   State<LoginPage> createState() => _LoginPageState();
-// }
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+  bool _obscureText = true;
 
-// class _LoginPageState extends State<LoginPage> {
-//   TextEditingController username = TextEditingController();
-//   TextEditingController password = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Scaffold(
+        body: ListView(
+          children: [
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              'Login',
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey,
+                  fontSize: 30),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Image.network(
+              '../../assets/image/logo.png',
+              height: 150,
+              width: 150,
+            ),
+            SizedBox(
+              height: 45,
+            ),
+            TextField(
+              controller: username,
+              decoration: InputDecoration(
+                labelText: 'ชื่อผู้ใช้',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person, color: Color(0xFF005FBC)),
+              ),
+            ),
+            SizedBox(height: 15),
+            TextFormField(
+              controller: password,
+              obscureText: _obscureText,
+              decoration: InputDecoration(
+                labelText: 'รหัสผ่าน',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(
+                  Icons.lock,
+                  color: Color(0xFF005FBC),
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility : Icons.visibility_off,
+                    color: Color(0xFF005FBC),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 45,
+            ),
+            ElevatedButton(
+              onPressed: login,
+              child: Text(
+                "เข้าสู่ระบบ",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Color(0xFF005FBC)),
+                padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(vertical: 20, horizontal: 50)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                elevation: MaterialStateProperty.all(8),
+                shadowColor: MaterialStateProperty.all(Colors.grey.shade400),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.all(15.0),
-//       child: Scaffold(
-//         body: ListView(
-//           children: [
-//             SizedBox(
-//               height: 15,
-//             ),
-//             Text(
-//               'Login',
-//               style: const TextStyle(
-//                   fontWeight: FontWeight.bold,
-//                   color: Colors.blueGrey,
-//                   fontSize: 30),
-//               textAlign: TextAlign.center,
-//             ),
-//             SizedBox(
-//               height: 30,
-//             ),
-//             Image.network(
-//               'https://cdn-icons-png.flaticon.com/512/295/295128.png',
-//               height: 150,
-//               width: 150,
-//             ),
-//             SizedBox(
-//               height: 15,
-//             ),
-//             TextField(
-//                 controller: username,
-//                 decoration: InputDecoration(
-//                     labelText: 'UserName', border: OutlineInputBorder())),
-//             SizedBox(
-//               height: 15,
-//             ),
-//             TextField(
-//                 controller: password,
-//                 obscureText: true,
-//                 decoration: InputDecoration(
-//                     labelText: 'Password', border: OutlineInputBorder())),
-//             SizedBox(
-//               height: 15,
-//             ),
-//             ElevatedButton(
-//               onPressed: () {
-//                 if (username.text == 'admin' && password.text == '1234') {
-//                   print('USERNAME = admin, PASSWORD = 1234');
-//                   setState(() {
-//                     username.text = 'admin';
-//                     password.text = '1234';
+  Future<void> setToken(textStatus) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('accessToken', textStatus);
+  }
 
-//                     setUsername(username.text);
-//                     setPassword(password.text);
-//                     setStatus('Login Success');
-//                   });
-//                 } else {
-//                   print('Unauthorize');
-//                   setStatus('Login Failed');
-//                 }
-//               },
-//               child: Text("เข้าสู่ระบบ"),
-//               style: ButtonStyle(
-//                   backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
-//                   padding: MaterialStateProperty.all(
-//                       EdgeInsets.fromLTRB(50, 20, 50, 20)),
-//                   textStyle:
-//                       MaterialStateProperty.all(TextStyle(fontSize: 30))),
-//             ),
-//             SizedBox(
-//               height: 15,
-//             ),
-//             ElevatedButton(
-//               onPressed: () {
-//                 Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                       builder: (context) => ProfilePage(),
-//                     ));
-//               },
-//               child: Text("ไปหน้า Profile"),
-//               style: ButtonStyle(
-//                   backgroundColor: MaterialStateProperty.all(Colors.black12),
-//                   padding: MaterialStateProperty.all(
-//                       EdgeInsets.fromLTRB(50, 20, 50, 20)),
-//                   textStyle: MaterialStateProperty.all(
-//                       TextStyle(fontSize: 30, color: Colors.red))),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-//   //unbder _LoginPageState class
+  Future<void> login() async {
+    final url = Uri.parse('http://127.0.0.1:8000/auth/login');
+    final response = await http.post(
+      url,
+      body: json.encode({
+        'user_username': '${username.text}',
+        'user_password': '${password.text}',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
-//   Future<void> setUsername(textUsername) async {
-//     final SharedPreferences pref = await SharedPreferences.getInstance();
-//     pref.setString('username', textUsername);
-//   }
+    print(response);
+    if (response.statusCode == 200) {
+      // Login successful
+      final responseData = json.decode(response.body);
+      final accessToken = responseData['data']['access_token'];
+      await setToken(accessToken);
+      print(responseData);
 
-//   Future<void> setPassword(textPassword) async {
-//     final SharedPreferences pref = await SharedPreferences.getInstance();
-//     pref.setString('password', textPassword);
-//   }
-
-//   Future<void> setStatus(textStatus) async {
-//     final SharedPreferences pref = await SharedPreferences.getInstance();
-//     pref.setString('status', textStatus);
-//   }
-// }
+      // Navigate to IndexPage
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => IndexPage()));
+    } else {
+      // Login failed
+      print('Error: ${response.statusCode}');
+      // Login failed
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Authentication Failed',
+                style: TextStyle(color: Colors.red)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'We couldn\'t log you in.',
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Please check your username and password and try again.',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK', style: TextStyle(fontSize: 18)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+}
