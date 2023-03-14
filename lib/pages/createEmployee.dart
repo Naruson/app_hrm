@@ -39,8 +39,8 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
   var emp_type = null;
   var department = null;
   var position = null;
-  final _birthday = TextEditingController();
-  final _start_date = TextEditingController();
+  final TextEditingController _birthday = TextEditingController();
+  final TextEditingController _start_date = TextEditingController();
   late DateFormat dateFormat = DateFormat('yyyy-MM-dd');
   int _currentStep = 0;
   final _controller = TextEditingController();
@@ -74,7 +74,9 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
       );
       if (newDate != null) {
         setState(() {
-          _birthday.value = TextEditingValue(text: dateFormat.format(newDate).toString());
+          final formattedDate = DateFormat('yyyy-MM-dd').format(newDate);
+          _birthday.text = formattedDate;
+          print(_birthday.text);
         });
       }
     }  
@@ -89,7 +91,10 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
       );
       if (newDate != null) {
         setState(() {
-          _start_date.value = TextEditingValue(text: dateFormat.format(newDate).toString());
+          final formattedDate = DateFormat('yyyy-MM-dd').format(newDate);
+          _start_date.text = formattedDate;
+          print(_start_date.text);
+
         });
       }
     }  
@@ -512,7 +517,7 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
     try {
       var url = Uri.http('127.0.0.1:8000', '/app/employee');
       Map<String, String> header = {"Content-type": "application/json"};
-      String jsondata = '{"fullname_th":"${fullname_th.text}","fullname_en":"${fullname_en.text}","phone":"${phone.text}","nickname":"${nickname.text}","birthday" : "${_birthday.toString().split(' ')[0]}","ud_email":"${email.text}","dept_id":"${department}", "dp_id":"${position}","user_contract_type":"${emp_type}","user_username":"${username.text}","user_password":"${_controller.text}","user_start_date":"${_start_date.toString().split(' ')[0]}"}';
+      String jsondata = '{"fullname_th":"${fullname_th.text}","fullname_en":"${fullname_en.text}","phone":"${phone.text}","nickname":"${nickname.text}","birthday" : "${_birthday.text}","ud_email":"${email.text}","dept_id":"${department}", "dp_id":"${position}","user_contract_type":"${emp_type}","user_username":"${username.text}","user_password":"${_controller.text}","user_start_date":"${_start_date.text}","ud_id_card":"id_card"}';
 
       var response = await http.post(url, headers: header, body: jsondata);
 

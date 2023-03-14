@@ -57,7 +57,7 @@ class _EmployeeState extends State<Employee> {
           return Card(
             child: ListTile(
                 leading: Icon(
-                  IconData(0xf7c8, fontFamily: 'MaterialIcons'),
+                  IconData(0xe491, fontFamily: 'MaterialIcons'),
                   color: Colors.cyan[200],
                 ),
                 title: Text("${employeeList[index]['ud_fullname_th']}"),

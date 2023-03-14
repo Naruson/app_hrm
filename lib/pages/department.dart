@@ -131,7 +131,6 @@ class _DepartmentState extends State<Department> {
     var response = await http.get(url);
     final result = utf8.decode(response.bodyBytes);
 
-    print(result);
     setState(() {
       todolistitems = jsonDecode(result);
     });
