@@ -363,14 +363,6 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
                     },
                     child: const Text('Save'),
                   ),
-                if (_currentStep == 2)
-                  TextButton(
-                    onPressed: controls.onStepCancel,
-                    child: const Text(
-                      'CANCEL',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
                 if (_currentStep > 0 && _currentStep <= 1)
                   TextButton(
                     onPressed: controls.onStepCancel,
