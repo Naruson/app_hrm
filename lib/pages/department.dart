@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app_hrm/pages/createDepartment.dart';
 import 'package:app_hrm/pages/createEmployee.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:app_hrm/pages/position.dart';
@@ -31,9 +32,10 @@ class _DepartmentState extends State<Department> {
       body: Department(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CreateEmployeePage()))
-              .then((value) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CreateDepartmentPage())).then((value) {
             setState(() {
               if (value == 'add') {
                 final snackBar = SnackBar(
@@ -91,7 +93,10 @@ class _DepartmentState extends State<Department> {
                         gettodolist();
                         // do something when delete icon is pressed
                       },
-                      child: Icon(Icons.delete),
+                      child: Visibility(
+                        visible: todolistitems[index]['delete_status'] == true,
+                        child: Icon(Icons.delete),
+                      ),
                     ),
                     SizedBox(width: 8),
                     GestureDetector(
