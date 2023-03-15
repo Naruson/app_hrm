@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PositionPage extends StatefulWidget {
   // const UpdatePage({ Key? key }) : super(key: key);
@@ -136,7 +137,8 @@ class _UpdatePageState extends State<PositionPage> {
 
   Future getPosition() async {
     //
-    var url = Uri.http('127.0.0.1:8000', '/app/department/$_v1/position');
+    var url =
+        Uri.parse('${dotenv.env['BASE_URL']}/app/department/$_v1/position');
     //ประเภทของ Data ที่เราจะส่งไป เป็นแบบ json
     var response = await http.get(url);
     final result = utf8.decode(response.bodyBytes);
@@ -150,7 +152,7 @@ class _UpdatePageState extends State<PositionPage> {
   }
 
   Future deleteTodo() async {
-    var url = Uri.http('127.0.0.1:8000', '/api/delete-todolist/$_v1');
+    var url = Uri.parse('${dotenv.env['BASE_URL']}/api/delete-todolist/$_v1');
     Map<String, String> header = {"Content-type": "application/json"};
     var response = await http.delete(url, headers: header);
     print('------result-------');
@@ -158,8 +160,12 @@ class _UpdatePageState extends State<PositionPage> {
   }
 
   Future deletePosition(dp_id) async {
-    var url = Uri.http('127.0.0.1:8000', '/app/department/position/$dp_id');
-    Map<String, String> header = {"Content-type": "application/json"};
+    var url =
+        Uri.parse('${dotenv.env['BASE_URL']}/app/department/position/$dp_id');
+    Map<String, String> header = {
+      "Content-type": "application/json",
+      'ngrok-skip-browser-warning': 'true',
+    };
     var response = await http.delete(url, headers: header);
   }
 }

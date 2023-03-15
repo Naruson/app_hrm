@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Department extends StatefulWidget {
   const Department({super.key});
@@ -126,9 +127,9 @@ class _DepartmentState extends State<Department> {
 
   Future gettodolist() async {
     List alltodo = [];
-
-    var url = Uri.http('127.0.0.1:8000', '/app/department');
-    var response = await http.get(url);
+    var url = Uri.parse('${dotenv.env['BASE_URL']}/app/department');
+    var response =
+        await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
     final result = utf8.decode(response.bodyBytes);
 
     setState(() {
@@ -138,7 +139,8 @@ class _DepartmentState extends State<Department> {
 
   Future deleteDepartment(int dept_id) async {
     print(dept_id);
-    var url = Uri.http('127.0.0.1:8000', '/app/department/$dept_id');
-    var response = await http.delete(url);
+    var url = Uri.parse('${dotenv.env['BASE_URL']}/app/department/$dept_id');
+    var response =
+        await http.delete(url, headers: {'ngrok-skip-browser-warning': 'true'});
   }
 }

@@ -10,6 +10,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class IndexPage extends StatefulWidget {
   //const CreateEmployeePage({ Key? key }) : super(key: key);
@@ -92,11 +93,11 @@ class _IndexPageState extends State<IndexPage> {
     try {
       await getPassword();
       print('my token is: $accessToken');
-      final response = await http.delete(
-        Uri.parse('http://127.0.0.1:8000/auth/logout'),
-        headers: {'Authorization': 'Bearer $accessToken'},
-      );
-
+      final response = await http
+          .delete(Uri.parse('${dotenv.env['BASE_URL']}/auth/logout'), headers: {
+        'Authorization': 'Bearer $accessToken',
+        'ngrok-skip-browser-warning': 'true',
+      });
       if (response.statusCode == 200) {
         // Logout successful, perform any necessary actions
         print('Logout successful');
