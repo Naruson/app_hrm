@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Employee extends StatefulWidget {
   const Employee({super.key});
@@ -115,8 +116,9 @@ class _EmployeeState extends State<Employee> {
 
   Future<void> getEmployee() async {
     try {
-      var url = Uri.http('127.0.0.1:8000', '/app/employee');
-      var response = await http.get(url);
+      var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee');
+      var response =
+          await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
 
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
@@ -137,8 +139,11 @@ class _EmployeeState extends State<Employee> {
   }
 
   Future deleteUser(user_id) async {
-    var url = Uri.http('127.0.0.1:8000', '/app/employee/${user_id}');
-    Map<String, String> header = {"Content-type": "application/json"};
+    var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee/${user_id}');
+    Map<String, String> header = {
+      "Content-type": "application/json",
+      'ngrok-skip-browser-warning': 'true',
+    };
     var response = await http.delete(url, headers: header);
     print('------result-------');
     print(response.body);

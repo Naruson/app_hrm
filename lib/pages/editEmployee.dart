@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:math';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class EditEmployeePage extends StatefulWidget {
   final v1;
@@ -385,8 +386,10 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
 
   Future<void> getDepartment() async {
     try {
-      var url = Uri.http('127.0.0.1:8000', '/app/employee/createDepartment');
-      var response = await http.get(url);
+      var url =
+          Uri.parse('${dotenv.env['BASE_URL']}/app/employee/createDepartment');
+      var response =
+          await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
 
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
@@ -407,8 +410,9 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
 
   Future<void> getEmployeeType() async {
     try {
-      var url = Uri.http('127.0.0.1:8000', '/app/employee/create');
-      var response = await http.get(url);
+      var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee/create');
+      var response =
+          await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
 
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
@@ -429,8 +433,10 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
 
   Future<void> getPosition() async {
     try {
-      var url = await Uri.http('127.0.0.1:8000', '/app/department/$department');
-      var response = await http.get(url);
+      var url = await Uri.parse(
+          '${dotenv.env['BASE_URL']}/app/department/$department');
+      var response =
+          await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
 
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
@@ -451,8 +457,11 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
 
   Future updateUser() async {
     try {
-      var url = Uri.http('127.0.0.1:8000', '/app/employee/$_v1');
-      Map<String, String> header = {"Content-type": "application/json"};
+      var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee/$_v1');
+      Map<String, String> header = {
+        "Content-type": "application/json",
+        'ngrok-skip-browser-warning': 'true',
+      };
       String jsondata =
           '{"fullname_th":"${fullname_th.text}","fullname_en":"${fullname_en.text}","phone":"${phone.text}","nickname":"${nickname.text}","birthday" : "${_birthday.text}","email":"${email.text}","dept_id":"${department}", "dp_id":"${position}","user_contract_type":"${emp_type}","user_username":"${username.text}","user_start_date":"${_start_date.text}","ud_id_card":"${id_card.text}"}';
 
@@ -475,8 +484,11 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
 
 Future getUser() async {
   try {
-    var url = Uri.http('127.0.0.1:8000', '/app/employee/$_v1/edit');
-    Map<String, String> header = {"Content-type": "application/json"};
+    var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee/$_v1/edit');
+    Map<String, String> header = {
+      "Content-type": "application/json",
+      'ngrok-skip-browser-warning': 'true',
+    };
     var response = await http.get(url, headers: header);
 
     if (response.statusCode == 200) {

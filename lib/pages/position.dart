@@ -1,4 +1,5 @@
 import 'package:app_hrm/pages/createEmployee.dart';
+import 'package:app_hrm/pages/createPosition.dart';
 import 'package:app_hrm/pages/department.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PositionPage extends StatefulWidget {
   // const UpdatePage({ Key? key }) : super(key: key);
@@ -15,10 +17,10 @@ class PositionPage extends StatefulWidget {
   const PositionPage(this.v1, this.v2);
 
   @override
-  State<PositionPage> createState() => _UpdatePageState();
+  State<PositionPage> createState() => _PositionPageState();
 }
 
-class _UpdatePageState extends State<PositionPage> {
+class _PositionPageState extends State<PositionPage> {
   List positions = [];
   TextEditingController title = TextEditingController();
   TextEditingController detail = TextEditingController();
@@ -35,13 +37,6 @@ class _UpdatePageState extends State<PositionPage> {
     _v2 = widget.v2;
     getPosition();
   }
-
-  // List of items in our dropdown menu
-  //https://www.geeksforgeeks.org/flutter-dropdownbutton-widget/
-  var gender = [
-    'Female',
-    'Male',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +74,10 @@ class _UpdatePageState extends State<PositionPage> {
       body: listData(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CreateEmployeePage()))
+          Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreatePositionPage("$_v1")))
               .then((value) {
             setState(() {
               if (value == 'add') {
@@ -119,15 +116,12 @@ class _UpdatePageState extends State<PositionPage> {
                     getPosition();
                     // do something when delete icon is pressed
                   },
-                  child: Icon(Icons.delete),
+                  child: Visibility(
+                    visible: positions[index]['delete_status'] == true,
+                    child: Icon(Icons.delete),
+                  ),
                 ),
                 SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () {
-                    // do something when more_vert icon is pressed
-                  },
-                  child: Icon(Icons.more_vert),
-                ),
               ],
             ),
           ));
@@ -135,31 +129,29 @@ class _UpdatePageState extends State<PositionPage> {
   }
 
   Future getPosition() async {
-    //
-    var url = Uri.http('127.0.0.1:8000', '/app/department/$_v1/position');
+    var url =
+        Uri.parse('${dotenv.env['BASE_URL']}/app/department/$_v1/position');
     //ประเภทของ Data ที่เราจะส่งไป เป็นแบบ json
-    var response = await http.get(url);
+    var response =
+        await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
     final result = utf8.decode(response.bodyBytes);
-    //  "[" + response.body + "]";
-    // utf8.decode(response.bodyBytes);
 
-    print(result);
-    setState(() {
-      positions = jsonDecode(result);
-    });
-  }
-
-  Future deleteTodo() async {
-    var url = Uri.http('127.0.0.1:8000', '/api/delete-todolist/$_v1');
-    Map<String, String> header = {"Content-type": "application/json"};
-    var response = await http.delete(url, headers: header);
-    print('------result-------');
-    print(response.body);
+    if (response.statusCode == 200) {
+      var result = jsonDecode(response.body);
+      var data = result['data'];
+      setState(() {
+        positions = data;
+      });
+    }
   }
 
   Future deletePosition(dp_id) async {
-    var url = Uri.http('127.0.0.1:8000', '/app/department/position/$dp_id');
-    Map<String, String> header = {"Content-type": "application/json"};
+    var url =
+        Uri.parse('${dotenv.env['BASE_URL']}/app/department/position/$dp_id');
+    Map<String, String> header = {
+      "Content-type": "application/json",
+      'ngrok-skip-browser-warning': 'true',
+    };
     var response = await http.delete(url, headers: header);
   }
 }

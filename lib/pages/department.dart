@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app_hrm/pages/createDepartment.dart';
 import 'package:app_hrm/pages/createEmployee.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:app_hrm/pages/position.dart';
@@ -6,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Department extends StatefulWidget {
   const Department({super.key});
@@ -30,9 +32,10 @@ class _DepartmentState extends State<Department> {
       body: Department(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CreateEmployeePage()))
-              .then((value) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CreateDepartmentPage())).then((value) {
             setState(() {
               if (value == 'add') {
                 final snackBar = SnackBar(
@@ -90,7 +93,10 @@ class _DepartmentState extends State<Department> {
                         gettodolist();
                         // do something when delete icon is pressed
                       },
-                      child: Icon(Icons.delete),
+                      child: Visibility(
+                        visible: todolistitems[index]['delete_status'] == true,
+                        child: Icon(Icons.delete),
+                      ),
                     ),
                     SizedBox(width: 8),
                     GestureDetector(
@@ -126,9 +132,9 @@ class _DepartmentState extends State<Department> {
 
   Future gettodolist() async {
     List alltodo = [];
-
-    var url = Uri.http('127.0.0.1:8000', '/app/department');
-    var response = await http.get(url);
+    var url = Uri.parse('${dotenv.env['BASE_URL']}/app/department');
+    var response =
+        await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
     final result = utf8.decode(response.bodyBytes);
 
     setState(() {
@@ -138,7 +144,8 @@ class _DepartmentState extends State<Department> {
 
   Future deleteDepartment(int dept_id) async {
     print(dept_id);
-    var url = Uri.http('127.0.0.1:8000', '/app/department/$dept_id');
-    var response = await http.delete(url);
+    var url = Uri.parse('${dotenv.env['BASE_URL']}/app/department/$dept_id');
+    var response =
+        await http.delete(url, headers: {'ngrok-skip-browser-warning': 'true'});
   }
 }
