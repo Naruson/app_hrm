@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:app_hrm/pages/createEmployee.dart';
 import 'package:app_hrm/pages/editEmployee.dart';
+import 'package:app_hrm/pages/detailEmployee.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:app_hrm/pages/position.dart';
 import 'package:http/http.dart' as http;
@@ -67,7 +68,7 @@ class _EmployeeState extends State<Employee> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  EditEmployeePage(employeeList[index]['id'])))
+                                  DetailEmployeePage(employeeList[index]['id'])))
                       .then((value) {
                     setState(() {
                       print(value);
@@ -88,7 +89,7 @@ class _EmployeeState extends State<Employee> {
                         getEmployee();
                         // do something when delete icon is pressed
                       },
-                      child: Icon(Icons.delete),
+                      child: Icon(Icons.edit),
                     ),
                     SizedBox(width: 8),
                     GestureDetector(
@@ -96,7 +97,7 @@ class _EmployeeState extends State<Employee> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EditEmployeePage(
+                                builder: (context) => DetailEmployeePage(
                                     employeeList[index]['id']))).then((value) {
                           setState(() {
                             print(value);
