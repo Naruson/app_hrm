@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 15,
             ),
             Text(
-              'Login',
+              'เข้าสู่ระบบ',
               style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blueGrey,
