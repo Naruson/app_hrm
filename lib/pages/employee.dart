@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Employee extends StatefulWidget {
   const Employee({super.key});
@@ -82,11 +81,17 @@ class _EmployeeState extends State<Employee> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        deleteUser(employeeList[index]['id']);
-                        final snackBar = SnackBar(
-                          content: const Text('ลบรายการเรียบร้อยแล้ว'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditEmployeePage(
+                                    employeeList[index]['id']))).then((value) {
+                          setState(() {
+                            print(value);
+                            getEmployee();
+                          });
+                        });
+
                         getEmployee();
                         // do something when delete icon is pressed
                       },
@@ -117,7 +122,8 @@ class _EmployeeState extends State<Employee> {
 
   Future<void> getEmployee() async {
     try {
-      var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee');
+      var url = Uri.parse(
+          'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee');
       var response =
           await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
 
@@ -140,7 +146,8 @@ class _EmployeeState extends State<Employee> {
   }
 
   Future deleteUser(user_id) async {
-    var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee/${user_id}');
+    var url = Uri.parse(
+        'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee/${user_id}');
     Map<String, String> header = {
       "Content-type": "application/json",
       'ngrok-skip-browser-warning': 'true',

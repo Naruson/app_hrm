@@ -5,7 +5,6 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CreateDepartmentPage extends StatefulWidget {
   // const UpdatePage({ Key? key }) : super(key: key);
@@ -96,7 +95,7 @@ class _CreateDepartmentPageState extends State<CreateDepartmentPage> {
   }
 
   Future<void> storePosition() async {
-    final url = Uri.parse('${dotenv.env['BASE_URL']}/app/department');
+    final url = Uri.parse('https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/department');
     final headers = {
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': 'true',

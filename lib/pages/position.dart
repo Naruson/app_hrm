@@ -8,7 +8,6 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PositionPage extends StatefulWidget {
   // const UpdatePage({ Key? key }) : super(key: key);
@@ -132,7 +131,7 @@ class _PositionPageState extends State<PositionPage> {
 
   Future getPosition() async {
     var url =
-        Uri.parse('${dotenv.env['BASE_URL']}/app/department/$_v1/position');
+        Uri.parse('https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/department/$_v1/position');
     //ประเภทของ Data ที่เราจะส่งไป เป็นแบบ json
     var response =
         await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
@@ -149,7 +148,7 @@ class _PositionPageState extends State<PositionPage> {
 
   Future deletePosition(dp_id) async {
     var url =
-        Uri.parse('${dotenv.env['BASE_URL']}/app/department/position/$dp_id');
+        Uri.parse('https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/department/position/$dp_id');
     Map<String, String> header = {
       "Content-type": "application/json",
       'ngrok-skip-browser-warning': 'true',

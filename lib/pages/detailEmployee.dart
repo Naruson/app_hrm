@@ -230,7 +230,8 @@ class _DetailEmployeePageState extends State<DetailEmployeePage> {
 
   Future getUser() async {
     try {
-      var url = Uri.http('127.0.0.1:8000', '/app/employee/$_v1/edit');
+      var url = Uri.parse(
+          'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee/$_v1/edit');
       Map<String, String> header = {"Content-type": "application/json"};
       var response = await http.get(url, headers: header);
 
@@ -275,7 +276,8 @@ class _DetailEmployeePageState extends State<DetailEmployeePage> {
   }
 
   Future deleteUser(user_id) async {
-    var url = Uri.http('127.0.0.1:8000', '/app/employee/${user_id}');
+    var url = Uri.parse(
+        'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee/${user_id}');
     Map<String, String> header = {"Content-type": "application/json"};
     var response = await http.delete(url, headers: header);
     print('------result-------');
