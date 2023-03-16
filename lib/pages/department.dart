@@ -16,6 +16,8 @@ class Department extends StatefulWidget {
   State<Department> createState() => _DepartmentState();
 }
 
+const IconData myIcon = IconData(0xf7c8, fontFamily: 'MaterialIcons');
+
 class _DepartmentState extends State<Department> {
   List todolistitems = [];
   Color myColor = Color(int.parse("2E3579", radix: 16));
@@ -59,7 +61,7 @@ class _DepartmentState extends State<Department> {
           return Card(
             child: ListTile(
                 leading: Icon(
-                  IconData(0xf7c8, fontFamily: 'MaterialIcons'),
+                  myIcon,
                   color: Colors.cyan[200],
                 ),
                 title: Text("${todolistitems[index]['dept_name_en']}"),

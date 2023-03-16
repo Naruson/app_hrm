@@ -20,6 +20,8 @@ class PositionPage extends StatefulWidget {
   State<PositionPage> createState() => _PositionPageState();
 }
 
+const IconData myIcon1 = IconData(0xf7c8, fontFamily: 'MaterialIcons');
+
 class _PositionPageState extends State<PositionPage> {
   List positions = [];
   TextEditingController title = TextEditingController();
@@ -102,7 +104,7 @@ class _PositionPageState extends State<PositionPage> {
           return Card(
               child: ListTile(
             leading: Icon(
-              IconData(0xf7c8, fontFamily: 'MaterialIcons'),
+              myIcon1,
               color: Colors.cyan[200],
             ),
             title: Text("${positions[index]['dp_name_en']}"),

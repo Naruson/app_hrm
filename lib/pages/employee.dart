@@ -17,6 +17,8 @@ class Employee extends StatefulWidget {
   State<Employee> createState() => _EmployeeState();
 }
 
+const IconData myIcon1 = IconData(0xe491, fontFamily: 'MaterialIcons');
+
 class _EmployeeState extends State<Employee> {
   List employeeList = [];
   Color myColor = Color(int.parse("2E3579", radix: 16));
@@ -59,17 +61,16 @@ class _EmployeeState extends State<Employee> {
           return Card(
             child: ListTile(
                 leading: Icon(
-                  IconData(0xe491, fontFamily: 'MaterialIcons'),
+                  myIcon1,
                   color: Colors.cyan[200],
                 ),
                 title: Text("${employeeList[index]['ud_fullname_th']}"),
                 onTap: () {
                   Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailEmployeePage(employeeList[index]['id'])))
-                      .then((value) {
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetailEmployeePage(
+                              employeeList[index]['id']))).then((value) {
                     setState(() {
                       print(value);
                       getEmployee();
