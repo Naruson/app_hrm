@@ -10,6 +10,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class IndexPage extends StatefulWidget {
   //const CreateEmployeePage({ Key? key }) : super(key: key);
@@ -49,7 +50,7 @@ class _IndexPageState extends State<IndexPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.network(
-                    'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/files/image/logo/logo.png',
+                    '${dotenv.env['BASE_URL']}/files/image/logo/logo.png',
                     width: 30,
                   ),
                   const SizedBox(
@@ -92,13 +93,11 @@ class _IndexPageState extends State<IndexPage> {
     try {
       await getPassword();
       print('my token is: $accessToken');
-      final response = await http.delete(
-          Uri.parse(
-              'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/auth/logout'),
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-            'ngrok-skip-browser-warning': 'true',
-          });
+      final response = await http
+          .delete(Uri.parse('${dotenv.env['BASE_URL']}/auth/logout'), headers: {
+        'Authorization': 'Bearer $accessToken',
+        'ngrok-skip-browser-warning': 'true',
+      });
       if (response.statusCode == 200) {
         // Logout successful, perform any necessary actions
         print('Logout successful');

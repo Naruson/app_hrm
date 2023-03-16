@@ -3,6 +3,7 @@ import 'package:app_hrm/pages/employee.dart';
 import 'package:app_hrm/pages/index.dart';
 import 'package:app_hrm/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 void main() async {
+  await dotenv.load();
   runApp(MyApp());
 }
 

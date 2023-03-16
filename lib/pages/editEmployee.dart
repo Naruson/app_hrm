@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:math';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class EditEmployeePage extends StatefulWidget {
   final v1;
@@ -386,7 +387,7 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
   Future<void> getDepartment() async {
     try {
       var url =
-          Uri.parse('https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee/createDepartment');
+          Uri.parse('${dotenv.env['BASE_URL']}/app/employee/createDepartment');
       var response =
           await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
 
@@ -409,7 +410,7 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
 
   Future<void> getEmployeeType() async {
     try {
-      var url = Uri.parse('https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee/create');
+      var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee/create');
       var response =
           await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
 
@@ -433,7 +434,7 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
   Future<void> getPosition() async {
     try {
       var url = await Uri.parse(
-          'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/department/$department');
+          '${dotenv.env['BASE_URL']}/app/department/$department');
       var response =
           await http.get(url, headers: {'ngrok-skip-browser-warning': 'true'});
 
@@ -456,7 +457,8 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
 
   Future updateUser() async {
     try {
-      var url = Uri.parse('https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee/$_v1');
+      var url = Uri.parse(
+          'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee/$_v1');
       Map<String, String> header = {
         "Content-type": "application/json",
         'ngrok-skip-browser-warning': 'true',
@@ -483,7 +485,8 @@ class _EditEmployeePageState extends State<EditEmployeePage> {
 
 Future getUser() async {
   try {
-    var url = Uri.parse('https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee/$_v1/edit');
+    var url = Uri.parse(
+        'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/app/employee/$_v1/edit');
     Map<String, String> header = {
       "Content-type": "application/json",
       'ngrok-skip-browser-warning': 'true',

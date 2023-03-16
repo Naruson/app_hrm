@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginPage extends StatefulWidget {
   // const LoginPage({super.key});
@@ -39,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 30,
             ),
             Image.network(
-              'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/files/image/logo/logo.png',
+              '${dotenv.env['BASE_URL']}/files/image/logo/logo.png',
               height: 150,
               width: 150,
             ),
@@ -117,8 +118,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> login() async {
     print('${password.text} username: ${username.text}');
-    final url = Uri.parse(
-        'https://1683-2001-fb1-13c-6198-c08b-396b-aac7-e2ce.ap.ngrok.io/auth/login');
+    final url = Uri.parse('${dotenv.env['BASE_URL']}/auth/login');
     final response = await http.post(
       url,
       body: json.encode({
