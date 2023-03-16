@@ -47,62 +47,73 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 45,
             ),
-            TextField(
-              controller: username,
-              decoration: InputDecoration(
-                labelText: 'ชื่อผู้ใช้',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.person, color: Color(0xFF005FBC)),
-              ),
-            ),
-            SizedBox(height: 15),
-            TextFormField(
-              controller: password,
-              obscureText: _obscureText,
-              decoration: InputDecoration(
-                labelText: 'รหัสผ่าน',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Color(0xFF005FBC),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility : Icons.visibility_off,
-                    color: Color(0xFF005FBC),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: username,
+                    decoration: InputDecoration(
+                      labelText: 'ชื่อผู้ใช้',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.person, color: Color(0xFF005FBC)),
+                    ),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 45,
-            ),
-            ElevatedButton(
-              onPressed: login,
-              child: Text(
-                "เข้าสู่ระบบ",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xFF005FBC)),
-                padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(vertical: 20, horizontal: 50)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                  SizedBox(height: 15),
+                  TextFormField(
+                    controller: password,
+                    obscureText: _obscureText,
+                    decoration: InputDecoration(
+                      labelText: 'รหัสผ่าน',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Color(0xFF005FBC),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Color(0xFF005FBC),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
+                    ),
                   ),
-                ),
-                elevation: MaterialStateProperty.all(8),
-                shadowColor: MaterialStateProperty.all(Colors.grey.shade400),
+                  SizedBox(
+                    height: 45,
+                  ),
+                  ElevatedButton(
+                    onPressed: login,
+                    child: Text(
+                      "เข้าสู่ระบบ",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Color(0xFF005FBC)),
+                      padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 120)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      elevation: MaterialStateProperty.all(8),
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.grey.shade400),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
