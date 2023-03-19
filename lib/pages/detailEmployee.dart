@@ -232,7 +232,7 @@ class _DetailEmployeePageState extends State<DetailEmployeePage> {
   Future getUser() async {
     try {
       var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee/$_v1/edit');
-      Map<String, String> header = {"Content-type": "application/json"};
+      Map<String, String> header = {"Content-type": "application/json",'ngrok-skip-browser-warning': 'true'};
       var response = await http.get(url, headers: header);
 
       if (response.statusCode == 200) {
@@ -277,7 +277,10 @@ class _DetailEmployeePageState extends State<DetailEmployeePage> {
 
   Future deleteUser(user_id) async {
     var url = Uri.parse('${dotenv.env['BASE_URL']}/app/employee/${user_id}');
-    Map<String, String> header = {"Content-type": "application/json"};
+    Map<String, String> header = {
+      "Content-type": "application/json",
+      'ngrok-skip-browser-warning': 'true'
+    };
     var response = await http.delete(url, headers: header);
     print('------result-------');
     print(response.body);
